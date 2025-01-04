@@ -236,17 +236,15 @@ INSERT INTO songs(id,name,length,album_id) VALUES (181,'Hearted',4+(00/60),18);
 INSERT INTO songs(id,name,length,album_id) VALUES (182,'Frodo''s Dream',3+(06/60),18);
 
 
-
-select * from bands;
-select * from albums;
-select * from songs;
 #######3. Select only the names of all Bands from the songs table
-Select Distinct b.name from songs s
-Join albums a ON s.album_id = a.id
-Join bands b ON a.band_id = b.id;
+SELECT DISTINCT b.name FROM bands b
+JOIN albums a ON b.id = a.band_id
+JOIN songs s ON a.id = s.album_id;
+
 
 #####Select the oldest album.
-Select * from albums where release_year IS NOT NULL ORDER BY release_year ASC LIMIT 1;
+SELECT * FROM albums ORDER BY release_year ASC LIMIT 1;
+
 
 ###### Get all the bands that have albums
 Select Distinct b.name From bands b
