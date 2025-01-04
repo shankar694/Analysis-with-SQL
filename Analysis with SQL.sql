@@ -256,9 +256,10 @@ Left Join albums a ON b.id = a.band_id
 Where a.band_id IS NULL;
 
 #####7. Get the longest album
-select id, name, release_year, band_id from albums 
-order by LENGTH(name) DESC
-LIMIT 1;
+SELECT a.name, SUM(s.length) AS total_length FROM albums a
+JOIN songs s ON a.id = s.album_id
+GROUP BY a.id ORDER BY total_length DESC LIMIT 1;
+
 
 #####8. Insert a record for your favorite Band and one of their Albums
 INSERT INTO bands(id,name) VALUES (200,'Bigil');
@@ -273,22 +274,16 @@ Delete from albums where id = 201;
 SELECT AVG(length) AS average_length FROM songs;
 
 ####### Select the longest song of each album
-SELECT distinct a.id AS album_id, a.name AS album_name, 
-s.length AS longest_song_length, s.name AS longest_song_name
-FROM albums a
-JOIN songs s 
-ON s.album_id = a.id
-JOIN (SELECT album_id, MAX(length) AS max_length FROM songs
-GROUP BY album_id) AS max_songs
-ON s.album_id = max_songs.album_id AND s.length = max_songs.max_length
-ORDER BY a.id;
+SELECT s.name, MAX(s.length) AS longest_length FROM songs s
+JOIN albums a ON s.album_id = a.id
+GROUP BY a.id;
 
 ######  Get the number of songs for each band
-SELECT b.name, COUNT(s.id) AS song_count
-FROM bands b
+SELECT b.name, COUNT(s.id) AS song_count FROM bands b
 JOIN albums a ON b.id = a.band_id
 JOIN songs s ON a.id = s.album_id
 GROUP BY b.id;
+
 
 
 ##### Create a decade column with dividing the year // 10 *10.
